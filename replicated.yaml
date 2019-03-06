@@ -1,0 +1,89 @@
+---
+replicated_api_version: "2.8.0"
+name: "Reference"
+properties:
+  app_url: http://{{repl ConfigOption "hostname"}}
+  logo_url: http://www.replicated.com/images/logo.png
+  console_title: Reference Application
+
+cmds:
+- name: mysqlpassword
+  cmd: random
+  args:
+    - "64"
+    - _0-9a-zA-Z-
+
+components:
+  - name: Python Web
+    containers:
+      - source: public
+        image_name: marc/reference
+        version: latest
+        ports:
+          - private_port: "5000"
+            public_port: "80"
+
+  - name: Redis
+    containers:
+      - source: public
+        image_name: redis
+        version: 3.0.5
+        when: '{{repl ConfigOptionEquals "external_redis_uri" "" }}'
+        ports:
+          - private_port: "6379"
+            public_port: "6379"
+        publish_events:
+          - name: Redis started
+            trigger: container-start
+            subscriptions:
+              - component: Python Web
+                container: marc/reference
+                action: start
+
+  - name: Mysql
+    containers:
+      - source: public
+        image_name: mysql
+        display_name: mysql
+        version: 5.6.25
+        when: '{{repl ConfigOptionEquals "external_mysql_uri" "" }}'
+        env_vars:
+          - name: MYSQL_ROOT_PASSWORD
+            static_val: '{{repl ConfigOption "mysqlpassword"}}'
+        publish_events:
+          - name: Mysql start
+            trigger: container-start
+            subscriptions:
+              - component: Python Web
+                container: marc/reference
+                action: start
+
+config:
+  - name: generated
+    items:
+      - name: mysqlpassword
+        type: text
+        hidden: true
+        value_cmd:
+            name: mysqlpassword
+            value_at: 0
+
+  - name: randomness
+    title: Random fields
+    description: Just some random fields to show all options
+    items:
+      - name: textbox
+        type: text
+        title: A textbox
+        help_text: A plain textbox
+  - name: external_services
+    title: External Services
+    description: Some services can be external
+    items:
+      - name: external_redis_uri
+        type: text
+        title: External Redis URI
+      - name: external_mysql_uri
+        type: text
+        title: External Mysql URI
+
