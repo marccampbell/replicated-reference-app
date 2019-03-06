@@ -13,8 +13,8 @@ action "replicated_release" {
   needs = "filter-to-pr-open-synced"
   secrets = [
     "GITHUB_TOKEN",
-    "REPLICATED_API_TOKEN"
-  ],
+    "REPLICATED_API_TOKEN",
+  ]
   env = {
     REPLICATED_APP = "my-sweet-app"
   }
