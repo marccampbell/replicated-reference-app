@@ -16,6 +16,6 @@ action "replicated_release" {
     "REPLICATED_API_TOKEN",
   ]
   env = {
-    REPLICATED_APP = "my-sweet-app"
+    REPLICATED_APP = "marcreference"
   }
 }
