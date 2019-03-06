@@ -9,7 +9,7 @@ action "filter-to-pr-open-synced" {
 }
 
 action "replicated_release" {
-  uses = "replicatedhq/replicated-action/release@v0.1.1"
+  uses = "replicatedhq/replicated-action/release@v0.1.2"
   needs = "filter-to-pr-open-synced"
   secrets = [
     "GITHUB_TOKEN",
