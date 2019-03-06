@@ -14,7 +14,7 @@ action "replicated_release" {
   secrets = [
     "GITHUB_TOKEN",
     "REPLICATED_API_TOKEN"
-  ],
+  ]
   env = {
     REPLICATED_APP = "marcreference"
   }
