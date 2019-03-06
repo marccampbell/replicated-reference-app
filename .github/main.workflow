@@ -9,13 +9,13 @@ action "filter-to-pr-open-synced" {
 }
 
 action "replicated_release" {
-  uses = "docker://marc/replicated-action:latest"
+  uses = "replicatedhq/replicated-action/release@v0.1.1"
   needs = "filter-to-pr-open-synced"
   secrets = [
     "GITHUB_TOKEN",
     "REPLICATED_API_TOKEN"
   ],
   env = {
-    REPLICATED_APP = "my-sweet-app"
+    REPLICATED_APP = "marcreference"
   }
 }
